@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --bg: #0B0D14;
+  --surface: #111520;
+  --surface2: #161B28;
+  --surface3: #1C2235;
+  --border: #1E2535;
+  --border2: #2A3045;
+  --text: #E8E4DC;
+  --text2: #9AA0B4;
+  --muted: #4A5168;
+  --dim: #2A3045;
+
+  --green: #1D9E75;
+  --green-dim: #0A2218;
+  --green-soft: #5DCAA5;
+  --amber: #EF9F27;
+  --amber-dim: #2A1E08;
+  --red: #E24B4A;
+  --red-dim: #2A0F0F;
+  --blue: #378ADD;
+  --blue-dim: #0D1F3D;
+  --purple: #7F77DD;
+  --purple-dim: #1A1635;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
