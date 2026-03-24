@@ -1,4 +1,3 @@
-
 export const venueConfig = {
     //Venue info 
     name: 'Salspresso',
@@ -75,7 +74,8 @@ export const venueConfig = {
     //This is used to drive staffing alerts and recommendations.
     minimumStaff: {
         morning: {
-            barista: 2,
+            headBarista: 1,
+            barista: 1,
             floor: 1,
             kitchen: 1,
         },
