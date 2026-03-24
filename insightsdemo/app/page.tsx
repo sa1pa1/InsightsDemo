@@ -1,6 +1,8 @@
 "use client";
 import { venueConfig, getCurrentSession, isVenueOpen } from "./data/config";
 import { useState, useEffect } from "react";
+import { processShifts, getTotalLabourCost } from "./lib/shiftcalculations";
+import { fetchWeather, WeatherData } from "./lib/weather";
 const pulseStyle = `
   @keyframes pulse {
     0% { transform: scale(1); opacity: 1; }
@@ -13,6 +15,15 @@ const pulseStyle = `
 `;
 
 export default function Home() {
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+
+  useEffect(() => {
+    fetchWeather().then(setWeather);
+    const interval = setInterval(() => fetchWeather().then(setWeather), 300000); // refresh every 5 mins
+    return () => clearInterval(interval);
+  }, []);
+
+  const shifts = processShifts();
   const [session, setSession] = useState<{
     id: string;
     label: string;
@@ -209,7 +220,6 @@ export default function Home() {
                 style={{
                   color: "#9AA0B4",
                   fontSize: "45px",
-                  fontFamily: "monospace",
                 }}
               >
                 {time}
@@ -253,30 +263,93 @@ export default function Home() {
               gap: "10px",
             }}
           >
-            {["Labour % Now", "SPLH Live", "Staff on Floor", "Weather"].map(
-              (label) => (
-                <div
-                  key={label}
+            {["Labour % Now", "SPLH Live", "Staff on Floor"].map((label) => (
+              <div
+                key={label}
+                style={{
+                  background: "#111520",
+                  border: "1px solid #FFFFFF",
+                  borderRadius: "10px",
+                  padding: "14px",
+                  height: "200px",
+                }}
+              >
+                <span
                   style={{
-                    background: "#111520",
-                    border: "1px solid #FFFFFF",
-                    borderRadius: "10px",
-                    padding: "14px",
-                    height: "200px",
+                    color: "#FFFFFF",
+                    fontSize: "25px",
+                    fontWeight: "900",
                   }}
                 >
-                  <span
+                  {label}
+                </span>
+              </div>
+            ))}
+            <div
+              style={{
+                background: "#111520",
+                border: "1px solid #FFFFFF",
+                borderRadius: "10px",
+                padding: "14px",
+                height: "200px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <span
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: "25px",
+                  fontWeight: "900",
+                }}
+              >
+                Weather · {venueConfig.location.suburb}
+              </span>
+              {weather ? (
+                <>
+                  <div
                     style={{
-                      color: "#FFFFFF",
-                      fontSize: "25px",
-                      fontWeight: "900",
+                      display: "flex",
+                      alignItems: "flex-end",
+                      gap: "8px",
                     }}
                   >
-                    {label}
-                  </span>
-                </div>
-              )
-            )}
+                    <span
+                      style={{
+                        color: "#FFFFFF",
+                        fontSize: "48px",
+                        fontWeight: "900",
+                        lineHeight: "1",
+                      }}
+                    >
+                      {weather.temperature}°C
+                    </span>
+                    <span style={{ fontSize: "32px", marginBottom: "4px" }}>
+                      {weather.icon}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                    }}
+                  >
+                    <span style={{ color: "#9AA0B4", fontSize: "18px" }}>
+                      {weather.description}
+                    </span>
+                    <span style={{ color: "#4A5168", fontSize: "16px" }}>
+                      Wind {weather.windSpeed} km/h
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <span style={{ color: "#4A5168", fontSize: "18px" }}>
+                  Loading weather...
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Right column */}
@@ -344,18 +417,288 @@ export default function Home() {
                 Roster — Today
               </p>
               <div style={{ height: "1px", background: "#1E2535" }} />
-              <p
+              {shifts.map((shift) => (
+                <div
+                  key={shift.staffId}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                    padding: "8px 0",
+                    borderBottom: "1px solid #1E2535",
+                  }}
+                >
+                  {/* Name + status */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#FFFFFF",
+                        fontSize: "25px",
+                        fontWeight: "900",
+                      }}
+                    >
+                      {shift.firstName} {shift.lastName}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "18px",
+                        fontWeight: "500",
+                        padding: "2px 10px",
+                        borderRadius: "4px",
+                        background:
+                          shift.status === "no-show"
+                            ? "#2A0F0F"
+                            : shift.status === "on-floor"
+                            ? "#0A2218"
+                            : shift.status === "on-break"
+                            ? "#2A1E08"
+                            : shift.status === "finished"
+                            ? "#1A1E26"
+                            : "#1A1E26",
+                        color:
+                          shift.status === "no-show"
+                            ? "#E24B4A"
+                            : shift.status === "on-floor"
+                            ? "#1D9E75"
+                            : shift.status === "on-break"
+                            ? "#EF9F27"
+                            : shift.status === "finished"
+                            ? "#4A5168"
+                            : "#4A5168",
+                      }}
+                    >
+                      {shift.status === "no-show"
+                        ? "No show"
+                        : shift.status === "on-floor"
+                        ? "On floor"
+                        : shift.status === "on-break"
+                        ? "On break"
+                        : shift.status === "finished"
+                        ? "Finished"
+                        : "Scheduled"}
+                    </span>
+                  </div>
+
+                  {/* Role + hours */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#4A5168",
+                        fontSize: "20px",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {shift.role.replace("-", " ")}
+                    </span>
+                    <span
+                      style={{
+                        color: "#4A5168",
+                        fontSize: "20px",
+                      
+                      }}
+                    >
+                      {shift.scheduledStart} – {shift.scheduledEnd}
+                    </span>
+                  </div>
+
+                  {/* Rounding tags */}
+                  {/* Clock-in rounding tags */}
+                  {shift.clockInResult && (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "4px",
+                        flexWrap: "wrap",
+                        marginTop: "2px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#4A5168",
+                          fontSize: "16px",
+                          
+                        }}
+                      >
+                        IN:
+                      </span>
+                      {shift.clockInResult.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: "500",
+                            padding: "2px 8px",
+                            borderRadius: "3px",
+                            background:
+                              tag.colour === "green"
+                                ? "#0A2218"
+                                : tag.colour === "amber"
+                                ? "#2A1E08"
+                                : tag.colour === "red"
+                                ? "#2A0F0F"
+                                : "#0D1F3D",
+                            color:
+                              tag.colour === "green"
+                                ? "#1D9E75"
+                                : tag.colour === "amber"
+                                ? "#EF9F27"
+                                : tag.colour === "red"
+                                ? "#E24B4A"
+                                : "#378ADD",
+                          }}
+                        >
+                          {tag.label}
+                        </span>
+                      ))}
+                      <span
+                        style={{
+                          color: "#4A5168",
+                          fontSize: "16px",
+                        }}
+                      >
+                        {shift.clockInResult.rawTime} →{" "}
+                        {shift.clockInResult.billableTime}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Clock-out rounding tags */}
+                  {shift.clockOutResult && (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "4px",
+                        flexWrap: "wrap",
+                        marginTop: "2px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#4A5168",
+                          fontSize: "16px",
+                        }}
+                      >
+                        OUT:
+                      </span>
+                      {shift.clockOutResult.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: "500",
+                            padding: "2px 8px",
+                            borderRadius: "3px",
+                            background:
+                              tag.colour === "green"
+                                ? "#0A2218"
+                                : tag.colour === "amber"
+                                ? "#2A1E08"
+                                : tag.colour === "red"
+                                ? "#2A0F0F"
+                                : "#0D1F3D",
+                            color:
+                              tag.colour === "green"
+                                ? "#1D9E75"
+                                : tag.colour === "amber"
+                                ? "#EF9F27"
+                                : tag.colour === "red"
+                                ? "#E24B4A"
+                                : "#378ADD",
+                          }}
+                        >
+                          {tag.label}
+                        </span>
+                      ))}
+                      <span
+                        style={{
+                          color: "#4A5168",
+                          fontSize: "16px",
+                        }}
+                      >
+                        {shift.clockOutResult.rawTime} →{" "}
+                        {shift.clockOutResult.billableTime}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Billable hours + gross pay */}
+                  {shift.billableHours > 0 && (
+                    <div
+                      style={{
+                        color: "#4A5168",
+                        fontSize: "18px",
+                      }}
+                    >
+                      {shift.billableHours}h billable · $
+                      {shift.grossPay.toFixed(2)}
+                    </div>
+                  )}
+
+                  {/* Missing break warning */}
+                  {shift.breakMissingResult && (
+                    <div style={{ color: "#EF9F27", fontSize: "18px" }}>
+                      ⚠ {shift.breakMissingResult.message}
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {/* Divider */}
+              <div
                 style={{
-                  color: "#FFFFFF",
-                  fontSize: "11px",
-                  fontWeight: "900",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
+                  height: "1px",
+                  background: "#1E2535",
+                  marginTop: "8px",
                 }}
-              >
-                Est. Labour Cost
-              </p>
-              {/* roster content here */}
+              />
+
+              {/* Est. Labour Cost */}
+              <div style={{ paddingTop: "8px" }}>
+                <p
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: "25px",
+                    fontWeight: "900",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    marginBottom: "6px",
+                  }}
+                >
+                  Est. Labour Cost
+                </p>
+                <p
+                  style={{
+                    color: "#E8E4DC",
+                    fontSize: "50px",
+                    fontWeight: "900",
+                    lineHeight: "1",
+                  }}
+                >
+                  ${getTotalLabourCost(shifts).toFixed(2)}
+                </p>
+                <p
+                  style={{
+                    color: "#4A5168",
+                    fontSize: "18px",
+                    marginTop: "4px",
+                  }}
+                >
+                  Today so far ·{" "}
+                  {shifts.filter((s) => s.status !== "no-show").length} staff
+                </p>
+              </div>
             </div>
           </div>
 
