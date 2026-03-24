@@ -68,7 +68,7 @@ export const venueConfig = {
         labourPercentage: 30, // (ceiling threshold) (FORMULA: total labour cost/total sales)*100 -> track that labour expenses are within a healthy range. 
         splh: 65, //(baseline threshold) (FORMULA: total net sales/total labour hours) -> track that the venue is generating enough sales for the labour hours worked.
         overtimeThreshold: 10, // (ceiling threshold) -> track that employees are not working excessive overtime hours.
-        lateClockInGrace: 5 //minutes - track that employees are clocking in on time for their shifts.
+        lateClockInGrace: 7 //minutes - track that employees are clocking in on time for their shifts.
     },
     //Minimum staff per role per session
     //This is used to drive staffing alerts and recommendations.
