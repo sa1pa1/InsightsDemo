@@ -1,3 +1,7 @@
+/**
+ * This utility handles clock-in and clock-out rounding logic based on configured rules:
+ */
+
 import { venueConfig } from "../data/config";
 
 export type RoundingStatus =

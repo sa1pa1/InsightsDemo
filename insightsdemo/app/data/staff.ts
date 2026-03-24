@@ -1,3 +1,7 @@
+/**
+ * This file contains the staff data for the cafe. 
+ * Each staff member has an id, first name, last name, role, employment type, and award rate.
+ */
 export type EmploymentType = 'casual' | 'part-time' | 'full-time';
 export type StaffRole = 'head-barista' | 'barista' | 'floor' | 'kitchen';
 

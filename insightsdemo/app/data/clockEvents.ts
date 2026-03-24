@@ -1,3 +1,6 @@
+/**
+ * This file defines the structure of clock events and provides a sample dataset for simulation.
+ */
 export type ClockEventType = 'clock-in' | 'break-start' | 'break-end' | 'clock-out';
 
 export interface ClockEvent {

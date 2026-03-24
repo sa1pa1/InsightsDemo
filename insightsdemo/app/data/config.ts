@@ -1,3 +1,9 @@
+/**
+ * This file defines the core configuration for the venue,
+ * including operating hours, service sessions, menu items, 
+ * labour targets, staffing requirements, break rules, minimum engagement rules,
+ * and award rates.
+ */
 export const venueConfig = {
     //Venue info 
     name: 'Salspresso',

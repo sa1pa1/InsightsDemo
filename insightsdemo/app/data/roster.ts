@@ -1,3 +1,10 @@
+/**
+ * This file contains the scheduled shifts for the current day. 
+ * Each shift includes the staff member's ID, role, scheduled start and end times, 
+ * and break details. 
+ * 
+ * This data is used to analyse compliance with award rules and identify any potential issues with the roster.
+ */
 import { StaffRole } from "./staff";
 
 export interface ScheduledShift {
