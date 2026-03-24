@@ -159,7 +159,7 @@ export function roundClockOut(
     };
   }
 
-  // Within 7 mins early OR on time OR within 10 mins late → paid to scheduled end
+  // Within 7 mins early OR on time OR within 7 mins late → paid to scheduled end
   if (diff >= -7 && diff <= overtimeThreshold) {
     const status = diff > 0 ? 'rounded-down' : 'on-time';
     return {

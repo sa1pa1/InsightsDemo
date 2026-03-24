@@ -14,7 +14,7 @@ export interface ClockEvent {
 export const todaysClockEvents: ClockEvent[] = [
 
   // MIA (s1) — clocks in 4 mins early, on time effectively
-  { id: 'ce1',  staffId: 's1', type: 'clock-in',    rawTime: '05:58', date: '2026-03-24' },
+  { id: 'ce1',  staffId: 's1', type: 'clock-in',    rawTime: '05:50', date: '2026-03-24' },
   { id: 'ce2',  staffId: 's1', type: 'break-start', rawTime: '10:02', date: '2026-03-24' },
   { id: 'ce3',  staffId: 's1', type: 'break-end',   rawTime: '10:31', date: '2026-03-24' },
   { id: 'ce4',  staffId: 's1', type: 'clock-out',   rawTime: '14:03', date: '2026-03-24' },
@@ -42,7 +42,7 @@ export const todaysClockEvents: ClockEvent[] = [
   // JUSTIN (s6) — clocks in on time, no break taken despite 6hr shift
   // Compliance flag fires for missing meal break
   { id: 'ce15', staffId: 's6', type: 'clock-in',    rawTime: '11:00', date: '2026-03-24' },
-  { id: 'ce16', staffId: 's6', type: 'clock-out',   rawTime: '17:06', date: '2026-03-24' },
+  { id: 'ce16', staffId: 's6', type: 'clock-out',   rawTime: '17:08', date: '2026-03-24' },
 
 ];
 
