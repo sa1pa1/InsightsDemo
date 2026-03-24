@@ -12,7 +12,9 @@ export const venueConfig = {
         suburb: 'Kingswood',
         state: 'SA',
         country: 'Australia',
-        timezone: 'GMT+10:30'
+        timezone: 'GMT+10:30',
+        lat: -34.9285,
+        lng: 138.6007,
     },
     //Operating hours
     trading: {
