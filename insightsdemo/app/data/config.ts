@@ -43,34 +43,51 @@ export const venueConfig = {
         },
 
     ],
-    //Menu items
+    //Menu items - realistic menu with categories, pricing, and GST inclusion - consistent with what Square, Lightspeed and Impos export. 
     menu: [
-        {
-            name: 'Espresso',
-            category: 'Beverage',
-            price: 3.00
-        },
-        {
-            name: 'Cappuccino',
-            category: 'Beverage',
-            price: 4.00
-        },
-        {
-            name: 'Latte',
-            category: 'Beverage',
-            price: 4.50
-        },
-        {
-            name: 'Muffin',
-            category: 'Food',
-            price: 2.50
-        },
-        {
-            name: 'Croissant',
-            category: 'Food',
-            price: 3.00
-        }
-    ],
+        // Beverages — coffee
+        { id: 'bev-001', name: 'Espresso',          category: 'Coffee',      price: 4.00,  gstInclusive: true,  active: true },
+        { id: 'bev-002', name: 'Doppio',             category: 'Coffee',      price: 4.50,  gstInclusive: true,  active: true },
+        { id: 'bev-003', name: 'Macchiato',          category: 'Coffee',      price: 4.00,  gstInclusive: true,  active: true },
+        { id: 'bev-004', name: 'Cappuccino',         category: 'Coffee',      price: 4.80,  gstInclusive: true,  active: true },
+        { id: 'bev-005', name: 'Latte',              category: 'Coffee',      price: 4.80,  gstInclusive: true,  active: true },
+        { id: 'bev-006', name: 'Flat White',         category: 'Coffee',      price: 4.80,  gstInclusive: true,  active: true },
+        { id: 'bev-007', name: 'Long Black',         category: 'Coffee',      price: 4.50,  gstInclusive: true,  active: true },
+        { id: 'bev-008', name: 'Mocha',              category: 'Coffee',      price: 5.20,  gstInclusive: true,  active: true },
+        { id: 'bev-009', name: 'Cold Brew',          category: 'Coffee',      price: 5.50,  gstInclusive: true,  active: true },
+        { id: 'bev-010', name: 'Iced Latte',         category: 'Coffee',      price: 6.00,  gstInclusive: true,  active: true },
+      
+        // Beverages — other
+        { id: 'bev-011', name: 'Chai Latte',         category: 'Beverage',    price: 5.20,  gstInclusive: true,  active: true },
+        { id: 'bev-012', name: 'Matcha Latte',       category: 'Beverage',    price: 5.80,  gstInclusive: true,  active: true },
+        { id: 'bev-013', name: 'Hot Chocolate',      category: 'Beverage',    price: 5.20,  gstInclusive: true,  active: true },
+        { id: 'bev-014', name: 'Fresh Orange Juice', category: 'Beverage',    price: 6.50,  gstInclusive: true,  active: true },
+        { id: 'bev-015', name: 'Sparkling Water',    category: 'Beverage',    price: 3.50,  gstInclusive: true,  active: true },
+        { id: 'bev-016', name: 'Still Water',        category: 'Beverage',    price: 3.00,  gstInclusive: true,  active: true },
+      
+        // Milk alternatives (add-on pricing)
+        { id: 'add-001', name: 'Oat Milk',           category: 'Add-on',      price: 0.80,  gstInclusive: true,  active: true },
+        { id: 'add-002', name: 'Almond Milk',        category: 'Add-on',      price: 0.80,  gstInclusive: true,  active: true },
+        { id: 'add-003', name: 'Soy Milk',           category: 'Add-on',      price: 0.80,  gstInclusive: true,  active: true },
+        { id: 'add-004', name: 'Extra Shot',         category: 'Add-on',      price: 0.60,  gstInclusive: true,  active: true },
+      
+        // Food — all-day
+        { id: 'food-001', name: 'Croissant',          category: 'Bakery',     price: 5.50,  gstInclusive: false, active: true },
+        { id: 'food-002', name: 'Almond Croissant',   category: 'Bakery',     price: 6.50,  gstInclusive: false, active: true },
+        { id: 'food-003', name: 'Banana Bread',       category: 'Bakery',     price: 6.00,  gstInclusive: false, active: true },
+        { id: 'food-004', name: 'Blueberry Muffin',   category: 'Bakery',     price: 5.50,  gstInclusive: false, active: true },
+        { id: 'food-005', name: 'Chocolate Brownie',  category: 'Bakery',     price: 5.50,  gstInclusive: false, active: true },
+        { id: 'food-006', name: 'Bircher Muesli',     category: 'Breakfast',  price: 14.00, gstInclusive: false, active: true },
+        { id: 'food-007', name: 'Avocado Toast',      category: 'Breakfast',  price: 18.00, gstInclusive: false, active: true },
+        { id: 'food-008', name: 'Eggs Benedict',      category: 'Breakfast',  price: 22.00, gstInclusive: false, active: true },
+        { id: 'food-009', name: 'Acai Bowl',          category: 'Breakfast',  price: 18.00, gstInclusive: false, active: true },
+      
+        // Food — lunch
+        { id: 'food-010', name: 'Chicken Sandwich',   category: 'Lunch',      price: 16.00, gstInclusive: false, active: true },
+        { id: 'food-011', name: 'Beef Burger',        category: 'Lunch',      price: 20.00, gstInclusive: false, active: true },
+        { id: 'food-012', name: 'Caesar Salad',       category: 'Lunch',      price: 18.00, gstInclusive: false, active: true },
+        { id: 'food-013', name: 'Soup of the Day',    category: 'Lunch',      price: 14.00, gstInclusive: false, active: true },
+      ],
     //Labour targets - drives health indicator and alerts
     targets: {
         labourPercentage: 30, // (ceiling threshold) (FORMULA: total labour cost/total sales)*100 -> track that labour expenses are within a healthy range. 
