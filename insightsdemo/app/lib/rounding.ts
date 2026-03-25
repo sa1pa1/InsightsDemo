@@ -30,18 +30,18 @@ export interface RoundingResult {
 }
 
 export const roundingTags: Record<RoundingStatus, RoundingTag[]> = {
-  'on-time':      [{ label: 'On time',       colour: 'green' }],
-  'early':        [{ label: 'Early',         colour: 'blue'  },
-                   { label: 'Overtime',      colour: 'red'   }],
-  'grace':        [{ label: 'Grace',         colour: 'green' }],
-  'late':         [{ label: 'Late',          colour: 'amber' }],
-  'overtime':     [{ label: 'Overtime',      colour: 'red'   }],
-  'no-show':      [{ label: 'No show',       colour: 'red'   }],
+  'on-time': [{ label: 'On time', colour: 'green' }],
+  'early': [{ label: 'Early', colour: 'blue' },
+  { label: 'Overtime', colour: 'red' }],
+  'grace': [{ label: 'Grace', colour: 'green' }],
+  'late': [{ label: 'Late', colour: 'amber' }],
+  'overtime': [{ label: 'Overtime', colour: 'red' }],
+  'no-show': [{ label: 'No show', colour: 'red' }],
   'missingbreak': [{ label: 'Missing break', colour: 'amber' }],
-  'rounded-down': [{ label: 'Late',          colour: 'amber' },
-                   { label: 'Grace',         colour: 'green' }],
-  'rounded-up':   [{ label: 'Late',          colour: 'amber' },
-                   { label: 'Overtime',      colour: 'red'   }],
+  'rounded-down': [{ label: 'Late', colour: 'amber' },
+  { label: 'Grace', colour: 'green' }],
+  'rounded-up': [{ label: 'Late', colour: 'amber' },
+  { label: 'Overtime', colour: 'red' }],
 };
 
 // Convert HH:MM to total minutes since midnight
@@ -170,8 +170,8 @@ export function roundClockOut(
       message: diff < 0
         ? `${Math.abs(diff)} mins early — within window, paid to ${scheduledEnd}`
         : diff === 0
-        ? `On time — paid to ${scheduledEnd}`
-        : `${diff} mins late — within threshold, rounded down to ${scheduledEnd}`,
+          ? `On time — paid to ${scheduledEnd}`
+          : `${diff} mins late — within threshold, rounded down to ${scheduledEnd}`,
       tags: roundingTags[status],
     };
   }

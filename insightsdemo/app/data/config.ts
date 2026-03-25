@@ -24,25 +24,25 @@ export const venueConfig = {
     //Service Session
     sessions: [
         {
-          id: 'morning',
-          label: 'Morning Service',
-          start: '06:00',
-          end: '09:00',
+            id: 'morning',
+            label: 'Morning Service',
+            start: '06:00',
+            end: '11:00',
         },
         {
-          id: 'lunch',
-          label: 'Lunch Service',
-          start: '09:00',
-          end: '14:00',
+            id: 'lunch',
+            label: 'Lunch Service',
+            start: '11:00',
+            end: '14:00',
         },
         {
-          id: 'afternoon',
-          label: 'Afternoon Service',
-          start: '14:00',
-          end: '17:00',
+            id: 'afternoon',
+            label: 'Afternoon Service',
+            start: '14:00',
+            end: '17:00',
         },
 
-      ],
+    ],
     //Menu items
     menu: [
         {
@@ -157,20 +157,20 @@ export const venueConfig = {
 export function getCurrentSession(date: Date) {
     const now = date.getHours() * 60 + date.getMinutes();
     return venueConfig.sessions.find(session => {
-      const [sh, sm] = session.start.split(':').map(Number);
-      const [eh, em] = session.end.split(':').map(Number);
-      const start = sh * 60 + sm;
-      const end = eh * 60 + em;
-      return now >= start && now < end;
+        const [sh, sm] = session.start.split(':').map(Number);
+        const [eh, em] = session.end.split(':').map(Number);
+        const start = sh * 60 + sm;
+        const end = eh * 60 + em;
+        return now >= start && now < end;
     }) ?? null;
-  }
+}
 
-  //Is the venue currently open? 
-  // Helper — is the venue currently open
+//Is the venue currently open? 
+// Helper — is the venue currently open
 export function isVenueOpen(date: Date) {
     const now = date.getHours() * 60 + date.getMinutes();
     const [oh, om] = venueConfig.trading.open.split(':').map(Number);
     const [ch, cm] = venueConfig.trading.close.split(':').map(Number);
     return now >= oh * 60 + om && now < ch * 60 + cm;
-  }
+}
 

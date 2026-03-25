@@ -49,3 +49,47 @@ export async function fetchWeather(): Promise<WeatherData | null> {
     return null;
   }
 }
+
+export interface publicHoliday {
+  date: string,
+  name: string,
+  isToday: boolean,
+  isThisWeek: boolean,
+}
+
+export async function fetchPublicHolidays(): Promise<publicHoliday[]> {
+  try {
+    const year = new Date().getFullYear();
+    const res = await fetch(
+      `https://date.nager.at/api/v3/PublicHolidays/${year}/AU`
+    );
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const weekFromNow = new Date(today);
+    weekFromNow.setDate(weekFromNow.getDate() + 7);
+
+    return data
+      .filter((h: { counties: string[] | null }) =>
+        // Include national holidays and SA-specific ones
+        h.counties === null || h.counties.includes('AU-SA')
+      )
+      .map((h: { date: string; name: string }) => {
+        const holidayDate = new Date(h.date);
+        holidayDate.setHours(0, 0, 0, 0);
+        return {
+          date: h.date,
+          name: h.name,
+          isToday: holidayDate.getTime() === today.getTime(),
+          isThisWeek:
+            holidayDate >= today && holidayDate <= weekFromNow,
+        };
+      })
+      .filter((h: publicHoliday) => h.isThisWeek);
+  } catch {
+    return [];
+  }
+}
