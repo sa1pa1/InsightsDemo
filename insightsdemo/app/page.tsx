@@ -1,22 +1,28 @@
 "use client";
+// imports of components and libraries
+import LabourPctCard from "./components/panels/LabourPctCard";
+import LeftPanel from "./components/layout/LeftPanel";
+import Topbar from "./components/layout/Topbar";
+import WeatherCard from "./components/panels/WeatherCard";
+import RosterCard from "./components/panels/RosterCard";
 
+// imports of hooks and utility functions
 import { useState, useEffect } from "react";
 import { getCurrentSession, isVenueOpen } from "./data/config";
-import { processShifts, getTotalLabourCost } from "./lib/shiftcalculations";
+import { processShifts, getTotalLabourCost, getLabourPct, getTotalBillableHours } from "./lib/shiftcalculations";
+import { getAccumulatedSales } from "./lib/salesCalculation";
 import {
   fetchWeather,
   fetchPublicHolidays,
   WeatherData,
   publicHoliday,
 } from "./lib/weather";
-import LeftPanel from "./components/layout/LeftPanel";
-import Topbar from "./components/layout/Topbar";
-import WeatherCard from "./components/panels/WeatherCard";
-import RosterCard from "./components/panels/RosterCard";
 
 export default function Home() {
+  // State variables for time, date and session info
   const [time, setTime] = useState("");
   const [dateStr, setDateStr] = useState("");
+
   const [session, setSession] = useState<{
     id: string;
     label: string;
@@ -27,10 +33,16 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [holidays, setHolidays] = useState<publicHoliday[]>([]);
 
+
   const [shifts, setShifts] = useState(() => processShifts());
   const [totalLabourCost, setTotalLabourCost] = useState(() =>
     getTotalLabourCost(processShifts())
   );
+
+  // State variables for labour cost and sales calculations
+
+  const [totalSales, setTotalSales] = useState(() => getAccumulatedSales());
+  const labourPct = getLabourPct(totalLabourCost, totalSales);
 
   useEffect(() => {
     const tick = () => {
@@ -59,6 +71,7 @@ export default function Home() {
         const updated = processShifts();
         setShifts(updated);
         setTotalLabourCost(getTotalLabourCost(updated));
+        setTotalSales(getAccumulatedSales());
       }
     };
     tick();
@@ -66,6 +79,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // State variable for weather data and public holidays
   useEffect(() => {
     fetchWeather().then(setWeather);
     const interval = setInterval(() => fetchWeather().then(setWeather), 300000);
@@ -76,6 +90,7 @@ export default function Home() {
     fetchPublicHolidays().then(setHolidays);
   }, []);
 
+  // main dashboard shell
   return (
     <div
       style={{
@@ -118,7 +133,8 @@ export default function Home() {
               gap: "10px",
             }}
           >
-            {["Labour % Now", "SPLH Live", "Staff on Floor"].map((label) => (
+            <LabourPctCard labourPct={labourPct} totalSales={totalSales} />
+            {[ "SPLH Live", "Staff on Floor"].map((label) => (
               <div
                 key={label}
                 style={{
