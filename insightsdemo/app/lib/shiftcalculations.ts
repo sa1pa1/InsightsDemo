@@ -90,6 +90,9 @@ export function processShifts(): ProcessedShift[] {
     const staffMember = staff.find(s => s.id === shift.staffId);
     if (!staffMember) return null;
 
+    const now = new Date();
+    const nowTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
     const events = todaysClockEvents.filter(e => e.staffId === shift.staffId);
     const clockInEvent = events.find(e => e.type === 'clock-in');
     const clockOutEvent = events.find(e => e.type === 'clock-out');
@@ -121,7 +124,7 @@ export function processShifts(): ProcessedShift[] {
     const clockInResult = roundClockIn(clockInEvent.rawTime, shift.scheduledStart);
 
     // Process clock-out if exists
-    const clockOutResult = clockOutEvent
+    const clockOutResult = clockOutEvent && clockOutEvent.rawTime <= nowTime
       ? roundClockOut(clockOutEvent.rawTime, shift.scheduledEnd)
       : null;
 
@@ -147,10 +150,16 @@ export function processShifts(): ProcessedShift[] {
     const grossPay = Math.round(billableHours * staffMember.awardRate * multiplier * 100) / 100;
 
     // Determine current status
+
+    const clockInHappened = clockInEvent && clockInEvent.rawTime <= nowTime;
+    const clockOutHappened = clockOutEvent && clockOutEvent.rawTime <= nowTime;
+    const breakStartHappened = breakStartEvent && breakStartEvent.rawTime <= nowTime;
+    const breakEndHappened = breakEndEvent && breakEndEvent.rawTime <= nowTime;
+    
     let status: ProcessedShift['status'] = 'scheduled';
-    if (clockInEvent && !clockOutEvent) {
-      status = breakStartEvent && !breakEndEvent ? 'on-break' : 'on-floor';
-    } else if (clockOutEvent) {
+    if (clockInHappened && !clockOutHappened) {
+      status = breakStartHappened && !breakEndHappened ? 'on-break' : 'on-floor';
+    } else if (clockInHappened && clockOutHappened) {
       status = 'finished';
     }
 

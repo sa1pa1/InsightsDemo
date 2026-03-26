@@ -27,8 +27,10 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [holidays, setHolidays] = useState<publicHoliday[]>([]);
 
-  const shifts = processShifts();
-  const totalLabourCost = getTotalLabourCost(shifts);
+  const [shifts, setShifts] = useState(() => processShifts());
+  const [totalLabourCost, setTotalLabourCost] = useState(() =>
+    getTotalLabourCost(processShifts())
+  );
 
   useEffect(() => {
     const tick = () => {
@@ -51,6 +53,13 @@ export default function Home() {
       );
       setSession(getCurrentSession(now));
       setIsOpen(isVenueOpen(now));
+
+      // Recalculate shifts every minute
+      if (now.getSeconds() === 0) {
+        const updated = processShifts();
+        setShifts(updated);
+        setTotalLabourCost(getTotalLabourCost(updated));
+      }
     };
     tick();
     const interval = setInterval(tick, 1000);
