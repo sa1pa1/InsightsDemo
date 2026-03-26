@@ -10,14 +10,11 @@ export default function LabourPctCard({
   totalSales,
 }: LabourPctCardProps) {
   const target = venueConfig.targets.labourPercentage;
-  const warningBuffer = venueConfig.targets.labourPctWarningBuffer;
-
-  const colour =
-    labourPct > target
-      ? "#E24B4A"
-      : labourPct > target * warningBuffer
-      ? "#EF9F27"
-      : "#1D9E75";
+  const colour = labourPct > target * venueConfig.targets.labourPctWarningBuffer
+  ? '#E24B4A'
+  : labourPct > target
+  ? '#EF9F27'
+  : '#1D9E75';
 
   return (
     <div

@@ -94,7 +94,7 @@ export const venueConfig = {
         splh: 65, //(baseline threshold) (FORMULA: total net sales/total labour hours) -> track that the venue is generating enough sales for the labour hours worked.
         overtimeThreshold: 7, // (ceiling threshold) -> track that employees are not working excessive overtime hours.
         lateClockInGrace: 7, //minutes - track that employees are clocking in on time for their shifts.
-        labourPctWarningBuffer: 0.9, // when labour percentage exceeds 90% of the target, trigger a warning to review staffing levels and sales performance.
+        labourPctWarningBuffer: 1.4, // amber when labour % exceeds target, red when more than 40% over target. 
         splhWarningBuffer: 1.1, // when SPLH falls below 110% of the target, trigger a warning to review staffing levels and sales performance.
     },
     //Minimum staff per role per session

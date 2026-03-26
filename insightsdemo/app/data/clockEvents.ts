@@ -26,16 +26,16 @@ export const todaysClockEvents: ClockEvent[] = [
   { id: 'ce7', staffId: 's2', type: 'break-end', rawTime: '10:01', date: 'TODAY' },
   { id: 'ce8', staffId: 's2', type: 'clock-out', rawTime: '11:58', date: 'TODAY' },
 
-  // SARAH (s3) — clocks in 3 mins late → grace, rounds back to 07:00
+  // SALLY (s3) — clocks in 3 mins late → grace, rounds back to 07:00
   // Clocks out 18 mins late → overtime flag fires
   { id: 'ce9', staffId: 's3', type: 'clock-in', rawTime: '07:03', date: 'TODAY' },
   { id: 'ce10', staffId: 's3', type: 'break-start', rawTime: '10:00', date: 'TODAY' },
   { id: 'ce11', staffId: 's3', type: 'break-end', rawTime: '10:35', date: 'TODAY' },
   { id: 'ce12', staffId: 's3', type: 'clock-out', rawTime: '13:18', date: 'TODAY' },
 
-  // TOM (s4) — no-show, no clock events at all
+  // JASON (s4) — no-show, no clock events at all
 
-  // PRIYA (s5) — clocks in 4 mins late → grace, rounds back to 09:00
+  // SARAH (s5) — clocks in 4 mins late → grace, rounds back to 09:00
   // Exactly 3hr shift — minimum engagement boundary
   { id: 'ce13', staffId: 's5', type: 'clock-in', rawTime: '09:04', date: 'TODAY' },
   { id: 'ce14', staffId: 's5', type: 'clock-out', rawTime: '13:57', date: 'TODAY' },
