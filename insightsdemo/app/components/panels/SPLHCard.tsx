@@ -42,6 +42,7 @@ export default function SPLHCard({ splh, totalBillableHours }: SPLHCardProps) {
             color: "#FFFFFF",
             fontSize: "25px",
             fontWeight: "900",
+            textTransform: "uppercase",
           }}
         >
           SPLH Live
@@ -64,12 +65,11 @@ export default function SPLHCard({ splh, totalBillableHours }: SPLHCardProps) {
             fontSize: "52px",
             fontWeight: "900",
             lineHeight: "1",
-            fontFamily: "monospace",
           }}
         >
           {totalBillableHours > 0 ? `$${splh.toFixed(0)}` : "—"}
         </div>
-        <div style={{ color: "#4A5168", fontSize: "16px", marginTop: "6px" }}>
+        <div style={{ color: "#4A5168", fontSize: "25px", marginTop: "6px" }}>
           Target ≥ ${target}
         </div>
       </div>

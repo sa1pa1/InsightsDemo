@@ -18,9 +18,9 @@ export const todaysClockEvents: ClockEvent[] = [
   { id: 'ce1', staffId: 's1', type: 'clock-in', rawTime: '05:50', date: TODAY },
   { id: 'ce2', staffId: 's1', type: 'break-start', rawTime: '10:02', date: TODAY },
   { id: 'ce3', staffId: 's1', type: 'break-end', rawTime: '10:31', date: TODAY },
-  { id: 'ce4', staffId: 's1', type: 'clock-out', rawTime: '14:03', date: TODAY },
+  { id: 'ce4', staffId: 's1', type: 'clock-out', rawTime: '16:03', date: TODAY },
 
-  // JAKE (s2) — clocks in 8 mins late → rounds to next :15
+  // KATHY (s2) — clocks in 8 mins late → rounds to next :15
   { id: 'ce5', staffId: 's2', type: 'clock-in', rawTime: '06:08', date: 'TODAY' },
   { id: 'ce6', staffId: 's2', type: 'break-start', rawTime: '09:28', date: 'TODAY' },
   { id: 'ce7', staffId: 's2', type: 'break-end', rawTime: '10:01', date: 'TODAY' },

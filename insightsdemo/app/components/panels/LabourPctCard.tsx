@@ -42,6 +42,7 @@ export default function LabourPctCard({
             color: "#FFFFFF",
             fontSize: "25px",
             fontWeight: "900",
+            textTransform: "uppercase",
           }}
         >
           Labour % Now
@@ -64,12 +65,11 @@ export default function LabourPctCard({
             fontSize: "52px",
             fontWeight: "900",
             lineHeight: "1",
-            fontFamily: "monospace",
           }}
         >
           {totalSales > 0 ? `${labourPct.toFixed(1)}%` : "—"}
         </div>
-        <div style={{ color: "#4A5168", fontSize: "16px", marginTop: "6px" }}>
+        <div style={{ color: "#4A5168", fontSize: "25px", marginTop: "6px" }}>
           Target ≤ {target}%
         </div>
       </div>

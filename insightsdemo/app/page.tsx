@@ -6,6 +6,7 @@ import Topbar from "./components/layout/Topbar";
 import WeatherCard from "./components/panels/WeatherCard";
 import RosterCard from "./components/panels/RosterCard";
 import SPLHCard from "./components/panels/SPLHCard";
+import StaffOnFloorCard from './components/panels/StaffonFloorCard';
 
 // imports of hooks and utility functions
 import { useState, useEffect } from "react";
@@ -146,28 +147,7 @@ export default function Home() {
           >
             <LabourPctCard labourPct={labourPct} totalSales={totalSales} />
             <SPLHCard splh={splh} totalBillableHours={totalBillableHours} />
-            {["Staff on Floor"].map((label) => (
-              <div
-                key={label}
-                style={{
-                  background: "#111520",
-                  border: "1px solid #FFFFFF",
-                  borderRadius: "10px",
-                  padding: "14px",
-                  height: "200px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#FFFFFF",
-                    fontSize: "25px",
-                    fontWeight: "900",
-                  }}
-                >
-                  {label}
-                </span>
-              </div>
-            ))}
+            <StaffOnFloorCard shifts={shifts} />
             <WeatherCard weather={weather} holidays={holidays} />
           </div>
 

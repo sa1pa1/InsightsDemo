@@ -108,7 +108,7 @@ export const venueConfig = {
         },
         lunch: {
             barista: 1,
-            floor: 2,
+            floor: 1,
             kitchen: 1,
         },
         afternoon: {
