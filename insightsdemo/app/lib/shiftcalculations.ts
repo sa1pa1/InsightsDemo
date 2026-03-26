@@ -51,7 +51,7 @@ function toMinutes(time: string): number {
 }
 
 function toHours(minutes: number): number {
-  return minutes / 60;
+  return Math.round((minutes / 60)*100)/100;
 }
 
 // function formatHourLabel(hour: number): string {
@@ -92,7 +92,7 @@ export function processShifts(): ProcessedShift[] {
 
     const now = new Date();
     const nowTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    
+
     const events = todaysClockEvents.filter(e => e.staffId === shift.staffId);
     const clockInEvent = events.find(e => e.type === 'clock-in');
     const clockOutEvent = events.find(e => e.type === 'clock-out');
@@ -133,35 +133,46 @@ export function processShifts(): ProcessedShift[] {
       ? checkMissingBreak(clockInResult.billableTime, clockOutResult.billableTime, hasBreak)
       : null;
 
-    // Calculate billable hours
-    const billableStart = clockInResult.billableTime;
-    const billableEnd = clockOutResult?.billableTime ?? null;
-
-    let billableHours = 0;
-    if (billableStart && billableEnd) {
-      const startMins = toMinutes(billableStart);
-      const endMins = toMinutes(billableEnd);
-      const unpaidBreak = shift.unpaidBreakMinutes;
-      billableHours = toHours(endMins - startMins - unpaidBreak);
-    }
-
-    // Calculate gross pay with penalty rates
-    const multiplier = getPenaltyMultiplier(billableStart, shift.date);
-    const grossPay = Math.round(billableHours * staffMember.awardRate * multiplier * 100) / 100;
-
     // Determine current status
-
     const clockInHappened = clockInEvent && clockInEvent.rawTime <= nowTime;
     const clockOutHappened = clockOutEvent && clockOutEvent.rawTime <= nowTime;
     const breakStartHappened = breakStartEvent && breakStartEvent.rawTime <= nowTime;
     const breakEndHappened = breakEndEvent && breakEndEvent.rawTime <= nowTime;
-    
+
     let status: ProcessedShift['status'] = 'scheduled';
     if (clockInHappened && !clockOutHappened) {
       status = breakStartHappened && !breakEndHappened ? 'on-break' : 'on-floor';
     } else if (clockInHappened && clockOutHappened) {
       status = 'finished';
     }
+
+
+    // Calculate billable hours
+    const billableStart = clockInResult.billableTime;
+    const billableEnd = clockOutResult?.billableTime ?? null;
+
+    let billableHours = 0;
+    if (billableStart && billableEnd) {
+      // Shift finished — use actual billable end
+      const startMins = toMinutes(billableStart);
+      const endMins = toMinutes(billableEnd);
+      const unpaidBreak = shift.unpaidBreakMinutes;
+      billableHours = toHours(endMins - startMins - unpaidBreak);
+    } else if (billableStart && !billableEnd) {
+      const startMins = toMinutes(billableStart);
+      const nowMins = toMinutes(nowTime);
+      
+      // Only deduct break if it has actually been recorded
+      // If break hasn't been taken yet, accumulate full hours
+      // missingbreak alert will fire separately to flag this for manager
+      const breakDeduction = hasBreak ? shift.unpaidBreakMinutes : 0;
+      billableHours = Math.max(0, toHours(nowMins - startMins - breakDeduction));
+    }
+
+    // Calculate gross pay with penalty rates
+    const multiplier = getPenaltyMultiplier(billableStart, shift.date);
+    const grossPay = Math.round(billableHours * staffMember.awardRate * multiplier * 100) / 100;
+
 
     return {
       staffId: shift.staffId,
