@@ -5,12 +5,20 @@ import LeftPanel from "./components/layout/LeftPanel";
 import Topbar from "./components/layout/Topbar";
 import WeatherCard from "./components/panels/WeatherCard";
 import RosterCard from "./components/panels/RosterCard";
+import SPLHCard from "./components/panels/SPLHCard";
 
 // imports of hooks and utility functions
 import { useState, useEffect } from "react";
 import { getCurrentSession, isVenueOpen } from "./data/config";
-import { processShifts, getTotalLabourCost, getLabourPct, getTotalBillableHours } from "./lib/shiftcalculations";
+import {
+  processShifts,
+  getTotalLabourCost,
+  getLabourPct,
+  getTotalBillableHours,
+  getSPLH,
+} from "./lib/shiftcalculations";
 import { getAccumulatedSales } from "./lib/salesCalculation";
+
 import {
   fetchWeather,
   fetchPublicHolidays,
@@ -32,7 +40,6 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [holidays, setHolidays] = useState<publicHoliday[]>([]);
-
 
   const [shifts, setShifts] = useState(() => processShifts());
   const [totalLabourCost, setTotalLabourCost] = useState(() =>
@@ -78,6 +85,10 @@ export default function Home() {
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  //State variable for SPLH
+  const totalBillableHours = getTotalBillableHours(shifts);
+  const splh = getSPLH(totalSales, totalBillableHours);
 
   // State variable for weather data and public holidays
   useEffect(() => {
@@ -134,7 +145,8 @@ export default function Home() {
             }}
           >
             <LabourPctCard labourPct={labourPct} totalSales={totalSales} />
-            {[ "SPLH Live", "Staff on Floor"].map((label) => (
+            <SPLHCard splh={splh} totalBillableHours={totalBillableHours} />
+            {["Staff on Floor"].map((label) => (
               <div
                 key={label}
                 style={{

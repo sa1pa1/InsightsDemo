@@ -116,7 +116,7 @@ export const todaysTransactions: Transaction[] = [
     tx('t017', TODAY, '07:49', [item('bev-011'), item('food-006'), item('bev-005')], 'card'),
     tx('t018', TODAY, '07:54', [item('bev-006', 2), item('add-001'), item('food-002')], 'contactless'),
     tx('t018b', TODAY, '07:57', [item('bev-005'), item('bev-006'), item('food-007'), item('bev-004')], 'card'),
-    tx('t018c', TODAY, '07:59', [item('bev-004', 2), item('food-008')], 'card'),
+    tx('t018c', TODAY, '07:59', [item('bev-004', 50), item('food-008')], 'card'),
   
     // 8am — peak morning
     tx('t019', TODAY, '08:01', [item('bev-005'), item('bev-006', 2), item('food-007')], 'card'),

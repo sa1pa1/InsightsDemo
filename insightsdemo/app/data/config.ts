@@ -95,7 +95,7 @@ export const venueConfig = {
         overtimeThreshold: 7, // (ceiling threshold) -> track that employees are not working excessive overtime hours.
         lateClockInGrace: 7, //minutes - track that employees are clocking in on time for their shifts.
         labourPctWarningBuffer: 1.4, // amber when labour % exceeds target, red when more than 40% over target. 
-        splhWarningBuffer: 1.1, // when SPLH falls below 110% of the target, trigger a warning to review staffing levels and sales performance.
+        splhWarningBuffer: 1.1, // amber when SPLH is between target and 110% of target (e.g. $65–$71.50), red when below target ($65), green when above $71.50
     },
     //Minimum staff per role per session
     //This is used to drive staffing alerts and recommendations.
